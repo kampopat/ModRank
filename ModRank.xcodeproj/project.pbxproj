@@ -14,6 +14,12 @@
 		DB10CEE61D42B0EB002C9663 /* ModRankTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB10CEE51D42B0EB002C9663 /* ModRankTests.swift */; };
 		DB10CEF11D42B0EB002C9663 /* ModRankUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB10CEF01D42B0EB002C9663 /* ModRankUITests.swift */; };
 		DB6A27B01D42B38D008572EE /* Matchmaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6A27AF1D42B38D008572EE /* Matchmaker.swift */; };
+		DB6A27B21D468F19008572EE /* EloRating.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6A27B11D468F19008572EE /* EloRating.swift */; };
+		DB6A27B81D468F46008572EE /* Chameleon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB6A27B31D468F46008572EE /* Chameleon.framework */; };
+		DB6A27B91D468F46008572EE /* Reachability.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB6A27B41D468F46008572EE /* Reachability.framework */; };
+		DB6A27BA1D468F46008572EE /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB6A27B51D468F46008572EE /* ReactiveCocoa.framework */; };
+		DB6A27BB1D468F46008572EE /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB6A27B61D468F46008572EE /* Result.framework */; };
+		DB6A27BC1D468F46008572EE /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB6A27B71D468F46008572EE /* XCGLogger.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +53,12 @@
 		DB10CEF01D42B0EB002C9663 /* ModRankUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModRankUITests.swift; sourceTree = "<group>"; };
 		DB10CEF21D42B0EB002C9663 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DB6A27AF1D42B38D008572EE /* Matchmaker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Matchmaker.swift; sourceTree = "<group>"; };
+		DB6A27B11D468F19008572EE /* EloRating.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EloRating.swift; sourceTree = "<group>"; };
+		DB6A27B31D468F46008572EE /* Chameleon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Chameleon.framework; path = Carthage/Build/iOS/Chameleon.framework; sourceTree = "<group>"; };
+		DB6A27B41D468F46008572EE /* Reachability.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Reachability.framework; path = Carthage/Build/iOS/Reachability.framework; sourceTree = "<group>"; };
+		DB6A27B51D468F46008572EE /* ReactiveCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveCocoa.framework; path = Carthage/Build/iOS/ReactiveCocoa.framework; sourceTree = "<group>"; };
+		DB6A27B61D468F46008572EE /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/iOS/Result.framework; sourceTree = "<group>"; };
+		DB6A27B71D468F46008572EE /* XCGLogger.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCGLogger.framework; path = Carthage/Build/iOS/XCGLogger.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +66,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DB6A27B81D468F46008572EE /* Chameleon.framework in Frameworks */,
+				DB6A27B91D468F46008572EE /* Reachability.framework in Frameworks */,
+				DB6A27BA1D468F46008572EE /* ReactiveCocoa.framework in Frameworks */,
+				DB6A27BB1D468F46008572EE /* Result.framework in Frameworks */,
+				DB6A27BC1D468F46008572EE /* XCGLogger.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -77,6 +94,7 @@
 		DB10CEC41D42B0EB002C9663 = {
 			isa = PBXGroup;
 			children = (
+				DB6A27BD1D468F53008572EE /* Frameworks */,
 				DB10CECF1D42B0EB002C9663 /* ModRank */,
 				DB10CEE41D42B0EB002C9663 /* ModRankTests */,
 				DB10CEEF1D42B0EB002C9663 /* ModRankUITests */,
@@ -98,6 +116,7 @@
 			isa = PBXGroup;
 			children = (
 				DB10CED01D42B0EB002C9663 /* AppDelegate.swift */,
+				DB6A27B11D468F19008572EE /* EloRating.swift */,
 				DB10CED21D42B0EB002C9663 /* ViewController.swift */,
 				DB10CED71D42B0EB002C9663 /* Assets.xcassets */,
 				DB10CED91D42B0EB002C9663 /* LaunchScreen.storyboard */,
@@ -125,6 +144,18 @@
 			path = ModRankUITests;
 			sourceTree = "<group>";
 		};
+		DB6A27BD1D468F53008572EE /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				DB6A27B31D468F46008572EE /* Chameleon.framework */,
+				DB6A27B41D468F46008572EE /* Reachability.framework */,
+				DB6A27B51D468F46008572EE /* ReactiveCocoa.framework */,
+				DB6A27B61D468F46008572EE /* Result.framework */,
+				DB6A27B71D468F46008572EE /* XCGLogger.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -135,6 +166,7 @@
 				DB10CEC91D42B0EB002C9663 /* Sources */,
 				DB10CECA1D42B0EB002C9663 /* Frameworks */,
 				DB10CECB1D42B0EB002C9663 /* Resources */,
+				DB6A27BE1D468FB6008572EE /* Run Script - Carthage */,
 			);
 			buildRules = (
 			);
@@ -250,6 +282,28 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		DB6A27BE1D468FB6008572EE /* Run Script - Carthage */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/Chameleon.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Reachability.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/ReactiveCocoa.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Result.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/XCGLogger.framework",
+			);
+			name = "Run Script - Carthage";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		DB10CEC91D42B0EB002C9663 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -258,6 +312,7 @@
 				DB10CED31D42B0EB002C9663 /* ViewController.swift in Sources */,
 				DB6A27B01D42B38D008572EE /* Matchmaker.swift in Sources */,
 				DB10CED11D42B0EB002C9663 /* AppDelegate.swift in Sources */,
+				DB6A27B21D468F19008572EE /* EloRating.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -391,6 +446,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = ModRank/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.kampopat.ModRank;
@@ -403,6 +462,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = ModRank/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.kampopat.ModRank;
