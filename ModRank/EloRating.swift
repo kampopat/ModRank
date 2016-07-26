@@ -21,7 +21,11 @@ enum Classification {
 // MARK: Elo Rating Protocol
 // --------------------
 protocol EloRatingProtocol {
+    
     func expectedWinProbability(forModule fModule: ModuleProtocol, againstModule aModule: ModuleProtocol)
+        -> Double
+    
+    func expectedWinProbabilityProducer(forModule fModule: ModuleProtocol, againstModule aModule: ModuleProtocol)
         -> SignalProducer<Double, NoError>
     
     func newRating(forModule module: ModuleProtocol,
@@ -34,8 +38,12 @@ protocol EloRatingProtocol {
 // --------------------
 struct EloRating: EloRatingProtocol {
     
+    func expectedWinProbability(forModule fModule: ModuleProtocol, againstModule aModule: ModuleProtocol) -> Double {
+        return 1 / (1 +  pow(10.0, ((aModule.rating-fModule.rating)/400.0)))
+    }
+    
     ////////////////////////////////////////////////////////////////////////////////
-    func expectedWinProbability(forModule fModule: ModuleProtocol, againstModule aModule: ModuleProtocol) -> SignalProducer<Double, NoError> {
+    func expectedWinProbabilityProducer(forModule fModule: ModuleProtocol, againstModule aModule: ModuleProtocol) -> SignalProducer<Double, NoError> {
         return SignalProducer { observer, _ in
             
             let probability = 1 / (1 +  pow(10.0, ((aModule.rating-fModule.rating)/400.0)))

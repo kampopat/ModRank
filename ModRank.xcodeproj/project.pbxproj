@@ -20,6 +20,8 @@
 		DB6A27BA1D468F46008572EE /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB6A27B51D468F46008572EE /* ReactiveCocoa.framework */; };
 		DB6A27BB1D468F46008572EE /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB6A27B61D468F46008572EE /* Result.framework */; };
 		DB6A27BC1D468F46008572EE /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB6A27B71D468F46008572EE /* XCGLogger.framework */; };
+		DB6A27C01D475309008572EE /* Round.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6A27BF1D475309008572EE /* Round.swift */; };
+		DB6A27C21D475656008572EE /* Module.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6A27C11D475656008572EE /* Module.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +61,8 @@
 		DB6A27B51D468F46008572EE /* ReactiveCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveCocoa.framework; path = Carthage/Build/iOS/ReactiveCocoa.framework; sourceTree = "<group>"; };
 		DB6A27B61D468F46008572EE /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/iOS/Result.framework; sourceTree = "<group>"; };
 		DB6A27B71D468F46008572EE /* XCGLogger.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCGLogger.framework; path = Carthage/Build/iOS/XCGLogger.framework; sourceTree = "<group>"; };
+		DB6A27BF1D475309008572EE /* Round.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Round.swift; sourceTree = "<group>"; };
+		DB6A27C11D475656008572EE /* Module.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Module.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,11 +121,13 @@
 			children = (
 				DB10CED01D42B0EB002C9663 /* AppDelegate.swift */,
 				DB6A27B11D468F19008572EE /* EloRating.swift */,
+				DB6A27C11D475656008572EE /* Module.swift */,
 				DB10CED21D42B0EB002C9663 /* ViewController.swift */,
 				DB10CED71D42B0EB002C9663 /* Assets.xcassets */,
 				DB10CED91D42B0EB002C9663 /* LaunchScreen.storyboard */,
 				DB10CEDC1D42B0EB002C9663 /* Info.plist */,
 				DB6A27AF1D42B38D008572EE /* Matchmaker.swift */,
+				DB6A27BF1D475309008572EE /* Round.swift */,
 			);
 			path = ModRank;
 			sourceTree = "<group>";
@@ -312,7 +318,9 @@
 				DB10CED31D42B0EB002C9663 /* ViewController.swift in Sources */,
 				DB6A27B01D42B38D008572EE /* Matchmaker.swift in Sources */,
 				DB10CED11D42B0EB002C9663 /* AppDelegate.swift in Sources */,
+				DB6A27C01D475309008572EE /* Round.swift in Sources */,
 				DB6A27B21D468F19008572EE /* EloRating.swift in Sources */,
+				DB6A27C21D475656008572EE /* Module.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
