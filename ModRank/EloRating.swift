@@ -20,7 +20,7 @@ enum Classification {
 // --------------------
 // MARK: Module Protocol
 // --------------------
-protocol Module {
+protocol ModuleProtocol {
     var icon: UIImage? { get set }
     var name: String { get set }
     var rating: Double { get set }
@@ -32,10 +32,10 @@ protocol Module {
 // MARK: Elo Rating Protocol
 // --------------------
 protocol EloRatingProtocol {
-    func expectedWinProbability(forModule fModule: Module, againstModule aModule: Module)
+    func expectedWinProbability(forModule fModule: ModuleProtocol, againstModule aModule: ModuleProtocol)
         -> SignalProducer<Double, NoError>
     
-    func newRating(forModule module: Module,
+    func newRating(forModule module: ModuleProtocol,
                    withClassification classification: Classification, expected: Double)
         -> SignalProducer<Double, NoError>
 }
@@ -46,7 +46,7 @@ protocol EloRatingProtocol {
 struct EloRating: EloRatingProtocol {
     
     ////////////////////////////////////////////////////////////////////////////////
-    func expectedWinProbability(forModule fModule: Module, againstModule aModule: Module) -> SignalProducer<Double, NoError> {
+    func expectedWinProbability(forModule fModule: ModuleProtocol, againstModule aModule: ModuleProtocol) -> SignalProducer<Double, NoError> {
         return SignalProducer { observer, _ in
             
             let probability = 1 / (1 +  pow(10.0, ((aModule.rating-fModule.rating)/400.0)))
@@ -56,7 +56,7 @@ struct EloRating: EloRatingProtocol {
     }
     
     ////////////////////////////////////////////////////////////////////////////////
-    func newRating(forModule module: Module, withClassification classification: Classification, expected: Double)
+    func newRating(forModule module: ModuleProtocol, withClassification classification: Classification, expected: Double)
         -> SignalProducer<Double, NoError> {
             
             switch classification {
@@ -68,7 +68,7 @@ struct EloRating: EloRatingProtocol {
     }
     
     ////////////////////////////////////////////////////////////////////////////////
-    private func loserNewRating(module: Module, expected: Double) -> SignalProducer<Double, NoError> {
+    private func loserNewRating(module: ModuleProtocol, expected: Double) -> SignalProducer<Double, NoError> {
         return SignalProducer { observer, _ in
             
             let rating = module.rating + ( Double(module.kFactor) * (0-expected))
@@ -79,7 +79,7 @@ struct EloRating: EloRatingProtocol {
     }
     
     ////////////////////////////////////////////////////////////////////////////////
-    private func winnerNewRating(module: Module, expected: Double) -> SignalProducer<Double, NoError> {
+    private func winnerNewRating(module: ModuleProtocol, expected: Double) -> SignalProducer<Double, NoError> {
         return SignalProducer { observer, _ in
             let rating = module.rating + ( Double(module.kFactor) * (1-expected))
             observer.sendNext(rating)
