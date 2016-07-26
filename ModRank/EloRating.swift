@@ -21,7 +21,7 @@ enum Classification {
 // MARK: Module Protocol
 // --------------------
 protocol Module {
-    var icon: UIImage { get set }
+    var icon: UIImage? { get set }
     var name: String { get set }
     var rating: Double { get set }
     var rounds: Int { get set }
@@ -35,7 +35,9 @@ protocol EloRatingProtocol {
     func expectedWinProbability(forModule fModule: Module, againstModule aModule: Module)
         -> SignalProducer<Double, NoError>
     
-    func newRating(forModule module: Module, withClassification classification: Classification, expected: Double) -> SignalProducer<Double, NoError>
+    func newRating(forModule module: Module,
+                   withClassification classification: Classification, expected: Double)
+        -> SignalProducer<Double, NoError>
 }
 
 // --------------------
