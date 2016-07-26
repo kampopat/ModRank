@@ -18,17 +18,6 @@ enum Classification {
 }
 
 // --------------------
-// MARK: Module Protocol
-// --------------------
-protocol ModuleProtocol {
-    var icon: UIImage? { get set }
-    var name: String { get set }
-    var rating: Double { get set }
-    var rounds: Int { get set }
-    var kFactor: Int { get set }
-}
-
-// --------------------
 // MARK: Elo Rating Protocol
 // --------------------
 protocol EloRatingProtocol {
