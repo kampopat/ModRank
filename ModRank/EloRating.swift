@@ -11,6 +11,17 @@ import ReactiveCocoa
 import enum Result.NoError
 
 // --------------------
+// MARK: Rounding
+// --------------------
+extension Double {
+    /// Rounds the double to decimal places value
+    func roundToPlaces(places:Int) -> Double {
+        let divisor = pow(10.0, Double(places))
+        return round(self * divisor) / divisor
+    }
+}
+
+// --------------------
 // MARK: Classification
 // --------------------
 enum Classification {
@@ -65,26 +76,24 @@ struct EloRating: EloRatingProtocol {
     }
     
     ////////////////////////////////////////////////////////////////////////////////
-    private func loserNewRating(module: ModuleProtocol, expected: Double) -> SignalProducer<Double, NoError> {
-        return SignalProducer { observer, _ in
-            
-            let rating = module.rating + ( Double(module.kFactor) * (0-expected))
-            observer.sendNext(rating)
-            observer.sendCompleted()
-            
-        }
+    private func loserNewRating(module: ModuleProtocol, expected: Double)
+        -> SignalProducer<Double, NoError> {
+            return SignalProducer { observer, _ in
+                let rating = module.rating + ( Double(module.kFactor) * (0-expected))
+                observer.sendNext(rating.roundToPlaces(3))
+                observer.sendCompleted()
+            }
     }
     
     ////////////////////////////////////////////////////////////////////////////////
-    private func winnerNewRating(module: ModuleProtocol, expected: Double) -> SignalProducer<Double, NoError> {
-        return SignalProducer { observer, _ in
-            let rating = module.rating + ( Double(module.kFactor) * (1-expected))
-            observer.sendNext(rating)
-            observer.sendCompleted()
-        }
+    private func winnerNewRating(module: ModuleProtocol, expected: Double)
+        -> SignalProducer<Double, NoError> {
+            return SignalProducer { observer, _ in
+                let rating = module.rating + ( Double(module.kFactor) * (1-expected))
+                observer.sendNext(rating.roundToPlaces(3))
+                observer.sendCompleted()
+            }
     }
-    
-    
 }
 
 

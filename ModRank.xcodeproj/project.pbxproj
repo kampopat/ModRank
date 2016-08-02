@@ -22,6 +22,8 @@
 		DB6A27BC1D468F46008572EE /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB6A27B71D468F46008572EE /* XCGLogger.framework */; };
 		DB6A27C01D475309008572EE /* Round.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6A27BF1D475309008572EE /* Round.swift */; };
 		DB6A27C21D475656008572EE /* Module.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6A27C11D475656008572EE /* Module.swift */; };
+		DB6A27C41D47B81D008572EE /* RoundViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6A27C31D47B81D008572EE /* RoundViewController.swift */; };
+		DB6A27C61D47C2BF008572EE /* Signal+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6A27C51D47C2BF008572EE /* Signal+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +65,8 @@
 		DB6A27B71D468F46008572EE /* XCGLogger.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCGLogger.framework; path = Carthage/Build/iOS/XCGLogger.framework; sourceTree = "<group>"; };
 		DB6A27BF1D475309008572EE /* Round.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Round.swift; sourceTree = "<group>"; };
 		DB6A27C11D475656008572EE /* Module.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Module.swift; sourceTree = "<group>"; };
+		DB6A27C31D47B81D008572EE /* RoundViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoundViewController.swift; sourceTree = "<group>"; };
+		DB6A27C51D47C2BF008572EE /* Signal+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Signal+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,7 +131,9 @@
 				DB10CED91D42B0EB002C9663 /* LaunchScreen.storyboard */,
 				DB10CEDC1D42B0EB002C9663 /* Info.plist */,
 				DB6A27AF1D42B38D008572EE /* Matchmaker.swift */,
+				DB6A27C31D47B81D008572EE /* RoundViewController.swift */,
 				DB6A27BF1D475309008572EE /* Round.swift */,
+				DB6A27C51D47C2BF008572EE /* Signal+Extensions.swift */,
 			);
 			path = ModRank;
 			sourceTree = "<group>";
@@ -318,7 +324,9 @@
 				DB10CED31D42B0EB002C9663 /* ViewController.swift in Sources */,
 				DB6A27B01D42B38D008572EE /* Matchmaker.swift in Sources */,
 				DB10CED11D42B0EB002C9663 /* AppDelegate.swift in Sources */,
+				DB6A27C61D47C2BF008572EE /* Signal+Extensions.swift in Sources */,
 				DB6A27C01D475309008572EE /* Round.swift in Sources */,
+				DB6A27C41D47B81D008572EE /* RoundViewController.swift in Sources */,
 				DB6A27B21D468F19008572EE /* EloRating.swift in Sources */,
 				DB6A27C21D475656008572EE /* Module.swift in Sources */,
 			);

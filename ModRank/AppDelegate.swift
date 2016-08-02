@@ -16,7 +16,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        
+        
+        //Root View Controller
+        self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
+        self.window?.rootViewController = self.rootViewController()
+        self.window?.makeKeyAndVisible()
+        
         return true
+    }
+    
+    private func rootViewController() -> UIViewController {
+        let matchmaker = MatchmakerTest()
+        return RoundViewController(roundProducer: matchmaker.roundProducer())
     }
 
     func applicationWillResignActive(application: UIApplication) {
