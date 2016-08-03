@@ -7,16 +7,22 @@
 //
 
 import UIKit
+import Firebase
+//import FirebaseAnalytics
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
+    
 
+    
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         
+        
+        FIRApp.configure()
         
         //Root View Controller
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
