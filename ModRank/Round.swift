@@ -9,6 +9,8 @@
 import Foundation
 import ReactiveCocoa
 import enum Result.NoError
+import Firebase
+import FirebaseDatabase
 
 // --------------------
 // MARK: Protocol
@@ -24,19 +26,26 @@ protocol RoundProtocol {
 }
 
 class Round: RoundProtocol {
-    
     var firstModule: ModuleProtocol
     var secondModule: ModuleProtocol
     var elo: EloRatingProtocol
     
+    private var _ref: FIRDatabaseReference
+    
     init(firstModule: ModuleProtocol, secondModule: ModuleProtocol, elo: EloRatingProtocol) {
+        
         self.firstModule = firstModule
         self.secondModule = secondModule
         self.elo = elo
+        
+        self._ref = FIRDatabase.database().reference()
     }
     
     func declareFirstModuleWinner() -> SignalProducer<(), NoError> {
         return SignalProducer { observer, _ in
+            
+            
+            
             
             let expectedFirst = self.elo.expectedWinProbability(forModule: self.firstModule, againstModule: self.secondModule)
             let expectedSecond = self.elo.expectedWinProbability(forModule: self.secondModule, againstModule: self.firstModule)
@@ -46,8 +55,17 @@ class Round: RoundProtocol {
                 expected: expectedFirst)
                 .on(
                     next: { rating in
+                        
                         self.firstModule.rating = rating
                         self.firstModule.rounds += 1
+                        
+                        self._ref
+                            .child("modules")
+                            .child(self.firstModule.name.lowercaseString)
+                            .child("rating").setValue(rating, withCompletionBlock: { _ in
+                                print("Should have completed writing first module")
+                            })
+                    
                 })
                 .then(self.elo.newRating(forModule: self.secondModule,
                     withClassification: .Loser,
@@ -56,6 +74,15 @@ class Round: RoundProtocol {
                     next: { rating in
                         self.secondModule.rating = rating
                         self.secondModule.rounds += 1
+                        
+                    
+                        
+                        self._ref
+                            .child("modules")
+                            .child(self.secondModule.name.lowercaseString)
+                            .child("rating").setValue(rating, withCompletionBlock: { _ in
+                                print("Should have completed writing second module")
+                            })
                 })
                 .startWithCompleted({
                     observer.sendCompleted()
@@ -76,6 +103,13 @@ class Round: RoundProtocol {
                     next: { rating in
                         self.secondModule.rating = rating
                         self.secondModule.rounds += 1
+                        
+                        self._ref
+                            .child("modules")
+                            .child(self.secondModule.name.lowercaseString)
+                            .child("rating").setValue(rating, withCompletionBlock: { _ in
+                                print("Should have completed writing second module")
+                            })
                 })
                 .then(self.elo.newRating(forModule: self.firstModule,
                     withClassification: .Loser,
@@ -84,6 +118,15 @@ class Round: RoundProtocol {
                     next: { rating in
                         self.firstModule.rating = rating
                         self.firstModule.rounds += 1
+                        
+                        
+                        
+                        self._ref
+                            .child("modules")
+                            .child(self.firstModule.name.lowercaseString)
+                            .child("rating").setValue(rating, withCompletionBlock: { _ in
+                                print("Should have completed writing first module")
+                            })
                 })
                 .startWithCompleted({
                     observer.sendCompleted()

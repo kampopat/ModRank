@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import FirebaseDatabase
 //import FirebaseAnalytics
 
 @UIApplicationMain
@@ -34,7 +35,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private func rootViewController() -> UIViewController {
         let matchmaker = MatchmakerTest()
-        return RoundViewController(roundProducer: matchmaker.roundProducer())
+        let modulesRef = FIRDatabase.database().reference().child("modules")
+        let firebaseMatchMaker = FirebaseMatchMaker(fireRef: modulesRef)
+        return RoundViewController(roundProducer: firebaseMatchMaker.roundProducer())
     }
 
     func applicationWillResignActive(application: UIApplication) {

@@ -11,6 +11,8 @@ import UIKit
 import ReactiveCocoa
 import enum Result.NoError
 
+import FirebaseDatabase
+
 
 public class RoundViewController: UIViewController {
     
@@ -30,6 +32,7 @@ public class RoundViewController: UIViewController {
     private var (_winnerSignal, _winnerObserver) = Signal<ButtonSignal, NoError>.pipe()
     
     private var _currentRound: RoundProtocol!
+    
     
     ////////////////////////////////////////////////////////////////////////////////
     init(roundProducer: SignalProducer<RoundProtocol, NSError>) {

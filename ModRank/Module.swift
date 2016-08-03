@@ -37,4 +37,12 @@ struct Module: ModuleProtocol {
         self.rounds = rounds
         self.kFactor = kFactor
     }
+    
+    ////////////////////////////////////////////////////////////////////////////////
+    init(dict: [String: AnyObject]) {
+        self.name = dict["name"] as! String
+        self.rating = dict["rating"] as! Double
+        self.rounds = dict["rounds"] as! Int
+        self.kFactor = dict["kFactor"] as! Int
+    }
 }
