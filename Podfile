@@ -5,6 +5,7 @@ use_frameworks!
 
 target 'ModRank' do
 pod 'Firebase'
+pod 'Firebase/Database'
 end
 
 target 'ModRankTests' do
