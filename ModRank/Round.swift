@@ -44,9 +44,6 @@ class Round: RoundProtocol {
     func declareFirstModuleWinner() -> SignalProducer<(), NoError> {
         return SignalProducer { observer, _ in
             
-            
-            
-            
             let expectedFirst = self.elo.expectedWinProbability(forModule: self.firstModule, againstModule: self.secondModule)
             let expectedSecond = self.elo.expectedWinProbability(forModule: self.secondModule, againstModule: self.firstModule)
             

@@ -34,7 +34,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     private func rootViewController() -> UIViewController {
-        let matchmaker = MatchmakerTest()
         let modulesRef = FIRDatabase.database().reference().child("modules")
         let firebaseMatchMaker = FirebaseMatchMaker(fireRef: modulesRef)
         return RoundViewController(roundProducer: firebaseMatchMaker.roundProducer())

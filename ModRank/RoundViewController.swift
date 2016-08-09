@@ -33,6 +33,7 @@ public class RoundViewController: UIViewController {
     
     private var _currentRound: RoundProtocol!
     
+    var fireRef: FIRDatabaseReference!
     
     ////////////////////////////////////////////////////////////////////////////////
     init(roundProducer: SignalProducer<RoundProtocol, NSError>) {
@@ -61,9 +62,26 @@ public class RoundViewController: UIViewController {
     override public func viewDidLoad() {
         super.viewDidLoad()
         
+        
+        self.fireRef = FIRDatabase.database().reference().child("modules")
+        
+//        self.fireRef.observeEventType(
+//            .Value,
+//            withBlock: { snapshot in
+//                guard let value = snapshot.value as? FirebaseValue else {
+//                    fatalError()
+//                }
+//                
+//                print("Firebase sent: \(value)")
+//        })
+        
+        
         self.view.backgroundColor = UIColor.redColor()
+      
         
         self._roundProducer.startWithResult { (result) in
+            
+//            print("Firebase sent: \(result)")
             
             switch result {
             case let .Success(round):
@@ -79,7 +97,7 @@ public class RoundViewController: UIViewController {
     ////////////////////////////////////////////////////////////////////////////////
     private func observeWinnerSignal() {
         
-        _winnerSignal.flatten(.Merge).take(1)
+        _winnerSignal.flatten(.Merge)//.take(1)
             .observeNext { winner in
                 
                 switch winner {
