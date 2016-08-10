@@ -13,3 +13,4 @@ let kRatingSecondKey = "ratingSecond"
 let kKFactorFirstKey = "kFactorFirst"
 let kKFactorSecondKey = "kFactorySecond"
 let kModulesReferenceKey = "modules"
+let kRatingsRounding = 3

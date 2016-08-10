@@ -33,12 +33,13 @@ enum Classification {
 // --------------------
 protocol EloRatingProtocol {
     
-    func expectedWinProbability(forModule fRating: Double, againstModule aRating: Double)
-        -> Double
+    func expectedWinProbability(forModule fRating: Double,
+                                          againstModule aRating: Double) -> Double
     
     func newRating(forRating rating: Double,
-                             withClassification classification: Classification, expected: Double, kFactor: Int)
-        -> SignalProducer<Double, NoError>
+                             withClassification classification: Classification,
+                             expected: Double,
+                             kFactor: Int) -> SignalProducer<Double, NoError>
 }
 
 // --------------------
@@ -46,13 +47,18 @@ protocol EloRatingProtocol {
 // --------------------
 struct EloRating: EloRatingProtocol {
     
-    func expectedWinProbability(forModule fRating: Double, againstModule aRating: Double) -> Double {
+    ////////////////////////////////////////////////////////////////////////////////
+    func expectedWinProbability(forModule fRating: Double,
+                                againstModule aRating: Double) -> Double {
+        
         return 1 / (1 +  pow(10.0, ((aRating-fRating)/400.0)))
     }
     
     ////////////////////////////////////////////////////////////////////////////////
-    func newRating(forRating rating: Double, withClassification classification: Classification, expected: Double, kFactor: Int)
-        -> SignalProducer<Double, NoError> {
+    func newRating(forRating rating: Double,
+                             withClassification classification: Classification,
+                             expected: Double,
+                             kFactor: Int) -> SignalProducer<Double, NoError> {
             
             switch classification {
             case .Winner:
@@ -67,7 +73,7 @@ struct EloRating: EloRatingProtocol {
         -> SignalProducer<Double, NoError> {
             return SignalProducer { observer, _ in
                 let rating = current + ( Double(kFactor) * (0-expected))
-                observer.sendNext(rating.roundToPlaces(3))
+                observer.sendNext(rating.roundToPlaces(kRatingsRounding))
                 observer.sendCompleted()
             }
     }
@@ -77,19 +83,8 @@ struct EloRating: EloRatingProtocol {
         -> SignalProducer<Double, NoError> {
             return SignalProducer { observer, _ in
                 let rating = current + ( Double(kFactor) * (1-expected))
-                observer.sendNext(rating.roundToPlaces(3))
+                observer.sendNext(rating.roundToPlaces(kRatingsRounding))
                 observer.sendCompleted()
             }
     }
 }
-
-
-
-
-
-
-
-
-
-
-

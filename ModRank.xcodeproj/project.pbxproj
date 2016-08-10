@@ -82,7 +82,7 @@
 		DB6A27C31D47B81D008572EE /* RoundViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoundViewController.swift; sourceTree = "<group>"; };
 		DB6A27C51D47C2BF008572EE /* Signal+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Signal+Extensions.swift"; sourceTree = "<group>"; };
 		DBA9D3A71D52531D00008CC8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "ModRank/GoogleService-Info.plist"; sourceTree = "<group>"; };
-		DBC9391C1D5B965B005BB691 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		DBC9391C1D5B965B005BB691 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Settings.swift; path = ../Settings.swift; sourceTree = "<group>"; };
 		E9C584BE9202FE8AE2A5D6D9 /* Pods_ModRank.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ModRank.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -135,7 +135,6 @@
 		DB10CEC41D42B0EB002C9663 = {
 			isa = PBXGroup;
 			children = (
-				DBC9391C1D5B965B005BB691 /* Settings.swift */,
 				DBA9D3A71D52531D00008CC8 /* GoogleService-Info.plist */,
 				DB6A27BD1D468F53008572EE /* Frameworks */,
 				DB10CECF1D42B0EB002C9663 /* ModRank */,
@@ -159,6 +158,7 @@
 		DB10CECF1D42B0EB002C9663 /* ModRank */ = {
 			isa = PBXGroup;
 			children = (
+				DBC9391C1D5B965B005BB691 /* Settings.swift */,
 				DB10CED01D42B0EB002C9663 /* AppDelegate.swift */,
 				DB6A27B11D468F19008572EE /* EloRating.swift */,
 				DB6A27C11D475656008572EE /* Module.swift */,
