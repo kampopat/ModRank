@@ -9,19 +9,16 @@
 import UIKit
 import Firebase
 import FirebaseDatabase
-//import FirebaseAnalytics
+
+
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-    
-
-    
+    ////////////////////////////////////////////////////////////////////////////////
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        // Override point for customization after application launch.
-        
         
         FIRApp.configure()
         
@@ -33,8 +30,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
+    ////////////////////////////////////////////////////////////////////////////////
     private func rootViewController() -> UIViewController {
-        let modulesRef = FIRDatabase.database().reference().child("modules")
+        let modulesRef = FIRDatabase.database().reference().child(kModulesReferenceKey)
         let firebaseMatchMaker = FirebaseMatchMaker(fireRef: modulesRef)
         return RoundViewController(roundProducer: firebaseMatchMaker.roundProducer())
     }

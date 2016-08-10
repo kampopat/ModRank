@@ -29,6 +29,7 @@
 		DB6A27C61D47C2BF008572EE /* Signal+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6A27C51D47C2BF008572EE /* Signal+Extensions.swift */; };
 		DBA9D3A81D52531D00008CC8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DBA9D3A71D52531D00008CC8 /* GoogleService-Info.plist */; };
 		DBA9D3A91D52531D00008CC8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DBA9D3A71D52531D00008CC8 /* GoogleService-Info.plist */; };
+		DBC9391D1D5B965B005BB691 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBC9391C1D5B965B005BB691 /* Settings.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,6 +82,7 @@
 		DB6A27C31D47B81D008572EE /* RoundViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoundViewController.swift; sourceTree = "<group>"; };
 		DB6A27C51D47C2BF008572EE /* Signal+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Signal+Extensions.swift"; sourceTree = "<group>"; };
 		DBA9D3A71D52531D00008CC8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "ModRank/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		DBC9391C1D5B965B005BB691 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		E9C584BE9202FE8AE2A5D6D9 /* Pods_ModRank.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ModRank.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -133,6 +135,7 @@
 		DB10CEC41D42B0EB002C9663 = {
 			isa = PBXGroup;
 			children = (
+				DBC9391C1D5B965B005BB691 /* Settings.swift */,
 				DBA9D3A71D52531D00008CC8 /* GoogleService-Info.plist */,
 				DB6A27BD1D468F53008572EE /* Frameworks */,
 				DB10CECF1D42B0EB002C9663 /* ModRank */,
@@ -493,6 +496,7 @@
 				DB6A27C61D47C2BF008572EE /* Signal+Extensions.swift in Sources */,
 				DB6A27C01D475309008572EE /* Round.swift in Sources */,
 				DB6A27C41D47B81D008572EE /* RoundViewController.swift in Sources */,
+				DBC9391D1D5B965B005BB691 /* Settings.swift in Sources */,
 				DB6A27B21D468F19008572EE /* EloRating.swift in Sources */,
 				DB6A27C21D475656008572EE /* Module.swift in Sources */,
 			);

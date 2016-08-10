@@ -14,10 +14,7 @@ import FirebaseDatabase
 
 
 typealias UpdateValues = [String: AnyObject]
-let kRatingFirstKey = "ratingFirst"
-let kRatingSecondKey = "ratingSecond"
-let kKFactorFirstKey = "kFactorFirst"
-let kKFactorSecondKey = "kFactorySecond"
+
 
 
 // --------------------
