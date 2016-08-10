@@ -33,7 +33,7 @@ protocol FirebaseMatchMakerProtocol: MatchmakerProtocol {
 }
 
 // --------------------
-// MARK: Firebase matchmaker 
+// MARK: Firebase matchmaker
 // --------------------
 ////////////////////////////////////////////////////////////////////////////////
 struct FirebaseMatchMaker: FirebaseMatchMakerProtocol {
@@ -65,41 +65,43 @@ struct FirebaseMatchMaker: FirebaseMatchMakerProtocol {
     }
     
     ////////////////////////////////////////////////////////////////////////////////
-    private func firebaseReferencesProducer(value: FirebaseValue) -> SignalProducer<[FIRDatabaseReference], NSError> {
-        return SignalProducer { observer, _ in
-        
-            let keys = value.map({ module in
-                return module.0
-            })
-            
-            let references = keys.map({ key in
-                return self.fireRef.child(key)
-            })
-            
-            observer.sendNext(references)
-            observer.sendCompleted()
-        }
+    private func firebaseReferencesProducer(value: FirebaseValue)
+        -> SignalProducer<[FIRDatabaseReference], NSError> {
+            return SignalProducer { observer, _ in
+                
+                let keys = value.map({ module in
+                    return module.0
+                })
+                
+                let references = keys.map({ key in
+                    return self.fireRef.child(key)
+                })
+                
+                observer.sendNext(references)
+                observer.sendCompleted()
+            }
     }
     
     ////////////////////////////////////////////////////////////////////////////////
-    private func referencesForNextRound(references: [FIRDatabaseReference]) -> SignalProducer<FirebasePair, NSError> {
+    private func referencesForNextRound(references: [FIRDatabaseReference])
+        -> SignalProducer<FirebasePair, NSError> {
         
-        return SignalProducer { observer, _ in
-            
-            var refs = references
-            
-            if refs.count > 1 {
-                let firstIndex = Int(arc4random_uniform(UInt32(refs.count)))
-                let first = refs.removeAtIndex(firstIndex)
+            return SignalProducer { observer, _ in
                 
-                let secondIndex = Int(arc4random_uniform(UInt32(refs.count)))
-                let second = refs.removeAtIndex(secondIndex)
+                var refs = references
                 
-                let pair = FirebasePair(first, second)
-                observer.sendNext(pair)
-                observer.sendCompleted()
+                if refs.count > 1 {
+                    let firstIndex = Int(arc4random_uniform(UInt32(refs.count)))
+                    let first = refs.removeAtIndex(firstIndex)
+                    
+                    let secondIndex = Int(arc4random_uniform(UInt32(refs.count)))
+                    let second = refs.removeAtIndex(secondIndex)
+                    
+                    let pair = FirebasePair(first, second)
+                    observer.sendNext(pair)
+                    observer.sendCompleted()
+                }
             }
-        }
     }
     
     ////////////////////////////////////////////////////////////////////////////////
@@ -113,10 +115,3 @@ struct FirebaseMatchMaker: FirebaseMatchMakerProtocol {
         }
     }
 }
-
-
-
-
-
-
-
