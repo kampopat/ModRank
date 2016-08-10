@@ -13,11 +13,13 @@ import enum Result.NoError
 import Chameleon
 import FirebaseDatabase
 
+
+enum Winner {
+    case First, Second
+}
+
 public class RoundViewController: UIViewController {
     
-    enum Winner {
-        case First, Second
-    }
     
     typealias ButtonSignal = Signal<Winner, NoError>
     
@@ -49,7 +51,6 @@ public class RoundViewController: UIViewController {
                 return Winner.Second
             })
 
-        
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -57,7 +58,6 @@ public class RoundViewController: UIViewController {
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
     
     ////////////////////////////////////////////////////////////////////////////////
     override public func viewDidLoad() {
@@ -80,15 +80,9 @@ public class RoundViewController: UIViewController {
     ////////////////////////////////////////////////////////////////////////////////
     private func observeWinnerSignal() {
         
-        _winnerSignal.flatten(.Merge).take(1)
+        _winnerSignal.flatten(.Merge)//.take(1)
             .observeNext { winner in
-                
-                switch winner {
-                case .First:
-                    self._currentRound.declareFirstModuleWinner().start()
-                case .Second:
-                    self._currentRound.declareSecondModuleWinner().start()
-                }
+                self._currentRound.declareModuleWinner(winner).start()
         }
         
         _winnerObserver.sendNext(_firstButtonSignal)
@@ -105,7 +99,6 @@ public class RoundViewController: UIViewController {
                     let name: String = val["name"] as! String
                     self._firstModuleButton.setTitle(name, forState: .Normal)
                 }
-                
         })
         
         self._currentRound.secondRef.observeSingleEventOfType(
@@ -116,7 +109,6 @@ public class RoundViewController: UIViewController {
                     let name: String = val["name"] as! String
                     self._secondModuleButton.setTitle(name, forState: .Normal)
                 }
-                
         })
         
         let buttonback = UIColor.whiteColor().colorWithAlphaComponent(0.5)

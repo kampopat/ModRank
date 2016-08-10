@@ -33,8 +33,8 @@ enum Classification {
 // --------------------
 protocol EloRatingProtocol {
     
-    func expectedWinProbability(forModule fRating: Double,
-                                          againstModule aRating: Double) -> Double
+    func expectedWinProbability(forRating fRating: Double,
+                                          againstRating aRating: Double) -> Double
     
     func newRating(forRating rating: Double,
                              withClassification classification: Classification,
@@ -48,8 +48,8 @@ protocol EloRatingProtocol {
 struct EloRating: EloRatingProtocol {
     
     ////////////////////////////////////////////////////////////////////////////////
-    func expectedWinProbability(forModule fRating: Double,
-                                againstModule aRating: Double) -> Double {
+    func expectedWinProbability(forRating fRating: Double,
+                                againstRating aRating: Double) -> Double {
         
         return 1 / (1 +  pow(10.0, ((aRating-fRating)/400.0)))
     }

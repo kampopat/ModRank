@@ -8,9 +8,24 @@
 
 import Foundation
 
+// --------------------
+// MARK: Module references
+// --------------------
+let kModulesReferenceKey = "modules"
+
+//Ratings
 let kRatingFirstKey = "ratingFirst"
 let kRatingSecondKey = "ratingSecond"
+
+//Round 
+let kRoundsFirstKey = "roundsFirst"
+let kRoundsSecondKey = "roundsSecond"
+
+//kFactor
 let kKFactorFirstKey = "kFactorFirst"
 let kKFactorSecondKey = "kFactorySecond"
-let kModulesReferenceKey = "modules"
+
+// --------------------
+// MARK: Other
+// --------------------
 let kRatingsRounding = 3
