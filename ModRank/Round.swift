@@ -12,12 +12,20 @@ import enum Result.NoError
 import Firebase
 import FirebaseDatabase
 
+
+typealias UpdateValues = [String: AnyObject]
+let kRatingFirstKey = "ratingFirst"
+let kRatingSecondKey = "ratingSecond"
+let kKFactorFirstKey = "kFactorFirst"
+let kKFactorSecondKey = "kFactorySecond"
+
+
 // --------------------
 // MARK: Protocol
 // --------------------
 protocol RoundProtocol {
-    var firstModule: ModuleProtocol { get set }
-    var secondModule: ModuleProtocol { get set }
+    var firstRef: FIRDatabaseReference { get set }
+    var secondRef: FIRDatabaseReference { get set }
     var elo: EloRatingProtocol { get }
     
     func declareFirstModuleWinner() -> SignalProducer<(), NoError>
@@ -26,110 +34,149 @@ protocol RoundProtocol {
 }
 
 class Round: RoundProtocol {
-    var firstModule: ModuleProtocol
-    var secondModule: ModuleProtocol
+    var firstRef: FIRDatabaseReference
+    var secondRef: FIRDatabaseReference
     var elo: EloRatingProtocol
     
-    private var _ref: FIRDatabaseReference
-    
-    init(firstModule: ModuleProtocol, secondModule: ModuleProtocol, elo: EloRatingProtocol) {
+    ////////////////////////////////////////////////////////////////////////////////
+    init(firstRef: FIRDatabaseReference, secondRef: FIRDatabaseReference, elo: EloRatingProtocol) {
         
-        self.firstModule = firstModule
-        self.secondModule = secondModule
+        self.firstRef = firstRef
+        self.secondRef = secondRef
         self.elo = elo
         
-        self._ref = FIRDatabase.database().reference()
+        self.firstRef.keepSynced(true)
+        self.secondRef.keepSynced(true)
+        
     }
     
+    
+    //TODO: Split this into two so that we can send completed for each reference
+    private func updateValuesProducer() -> SignalProducer<UpdateValues, NSError> {
+        return SignalProducer { observer, _ in
+        
+            var vals = UpdateValues()
+            
+            self.firstRef.observeEventType(.Value,
+                withBlock: { snapshot in
+                    
+                    guard let value = snapshot.value as? FirebaseValue else {
+                        fatalError()
+                    }
+                    
+                    vals[kRatingFirstKey] = value["rating"] as? Double
+                    vals[kKFactorFirstKey] = value["kFactor"] as? Int
+                    
+            })
+            
+            self.secondRef.observeEventType(.Value,
+                withBlock: { snapshot in
+                    
+                    guard let value = snapshot.value as? FirebaseValue else {
+                        fatalError()
+                    }
+                    
+                    vals[kRatingSecondKey] = value["rating"] as? Double
+                    vals[kKFactorSecondKey] = value["kFactor"] as? Int
+                    
+                    observer.sendNext(vals)
+                    observer.sendCompleted()
+            })
+        
+        }
+        
+        
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////////
     func declareFirstModuleWinner() -> SignalProducer<(), NoError> {
         return SignalProducer { observer, _ in
             
-            let expectedFirst = self.elo.expectedWinProbability(forModule: self.firstModule, againstModule: self.secondModule)
-            let expectedSecond = self.elo.expectedWinProbability(forModule: self.secondModule, againstModule: self.firstModule)
-            
-            self.elo.newRating(forModule: self.firstModule,
-                withClassification: .Winner,
-                expected: expectedFirst)
-                .on(
-                    next: { rating in
-                        
-                        self.firstModule.rating = rating
-                        self.firstModule.rounds += 1
-                        
-                        self._ref
-                            .child("modules")
-                            .child(self.firstModule.name.lowercaseString)
-                            .child("rating").setValue(rating, withCompletionBlock: { _ in
-                                print("Should have completed writing first module")
-                            })
-                    
-                })
-                .then(self.elo.newRating(forModule: self.secondModule,
-                    withClassification: .Loser,
-                    expected: expectedSecond))
-                .on(
-                    next: { rating in
-                        self.secondModule.rating = rating
-                        self.secondModule.rounds += 1
-                        
-                    
-                        
-                        self._ref
-                            .child("modules")
-                            .child(self.secondModule.name.lowercaseString)
-                            .child("rating").setValue(rating, withCompletionBlock: { _ in
-                                print("Should have completed writing second module")
-                            })
-                })
-                .startWithCompleted({
-                    observer.sendCompleted()
-                })
+            self.updateValuesProducer().startWithNext({ vals in
+                
+                let first = vals[kRatingFirstKey] as! Double
+                let second = vals[kRatingSecondKey] as! Double
+                let kFirst = vals[kKFactorFirstKey] as! Int
+                let kSecond = vals[kKFactorSecondKey] as! Int
+                
+                let expectedFirst = self.elo.expectedWinProbability(forModule: first, againstModule: second)
+                let expectedSecond = self.elo.expectedWinProbability(forModule: second, againstModule: first)
+                
+                self.elo.newRating(forRating: first,
+                    withClassification: .Winner,
+                    expected: expectedFirst,
+                    kFactor: kFirst)
+                    .on(
+                        next: { rating in
+                            
+                            self.firstRef
+                                .child("rating").setValue(rating, withCompletionBlock: { _ in
+                                    print("Should have completed writing first module")
+                                })
+                            
+                    })
+                    .then(self.elo.newRating(forRating: second,
+                        withClassification: .Loser,
+                        expected: expectedSecond,
+                        kFactor: kSecond))
+                    .on(
+                        next: { rating in
+                            
+                            self.secondRef
+                                .child("rating").setValue(rating, withCompletionBlock: { _ in
+                                    print("Should have completed writing second module")
+                                })
+                    })
+                    .startWithCompleted({
+                        observer.sendCompleted()
+                    })
+            })
         }
     }
     
+    ////////////////////////////////////////////////////////////////////////////////
     func declareSecondModuleWinner() -> SignalProducer<(), NoError> {
         return SignalProducer { observer, _ in
             
-            let expectedFirst = self.elo.expectedWinProbability(forModule: self.firstModule, againstModule: self.secondModule)
-            let expectedSecond = self.elo.expectedWinProbability(forModule: self.secondModule, againstModule: self.firstModule)
-            
-            self.elo.newRating(forModule: self.secondModule,
-                withClassification: .Winner,
-                expected: expectedSecond)
-                .on(
-                    next: { rating in
-                        self.secondModule.rating = rating
-                        self.secondModule.rounds += 1
-                        
-                        self._ref
-                            .child("modules")
-                            .child(self.secondModule.name.lowercaseString)
-                            .child("rating").setValue(rating, withCompletionBlock: { _ in
-                                print("Should have completed writing second module")
-                            })
-                })
-                .then(self.elo.newRating(forModule: self.firstModule,
+            self.updateValuesProducer().startWithNext({ vals in
+                
+                let first = vals[kRatingFirstKey] as! Double
+                let second = vals[kRatingSecondKey] as! Double
+                let kFirst = vals[kKFactorFirstKey] as! Int
+                let kSecond = vals[kKFactorSecondKey] as! Int
+                
+                let expectedFirst = self.elo.expectedWinProbability(forModule: first, againstModule: second)
+                let expectedSecond = self.elo.expectedWinProbability(forModule: second, againstModule: first)
+                
+                self.elo.newRating(forRating: first,
                     withClassification: .Loser,
-                    expected: expectedFirst))
-                .on(
-                    next: { rating in
-                        self.firstModule.rating = rating
-                        self.firstModule.rounds += 1
-                        
-                        
-                        
-                        self._ref
-                            .child("modules")
-                            .child(self.firstModule.name.lowercaseString)
-                            .child("rating").setValue(rating, withCompletionBlock: { _ in
-                                print("Should have completed writing first module")
-                            })
-                })
-                .startWithCompleted({
-                    observer.sendCompleted()
-                })
+                    expected: expectedFirst,
+                    kFactor: kFirst)
+                    .on(
+                        next: { rating in
+                            
+                            self.firstRef
+                                .child("rating").setValue(rating, withCompletionBlock: { _ in
+                                    print("Should have completed writing first module")
+                                })
+                            
+                    })
+                    .then(self.elo.newRating(forRating: second,
+                        withClassification: .Winner,
+                        expected: expectedSecond,
+                        kFactor: kSecond))
+                    .on(
+                        next: { rating in
+                            
+                            self.secondRef
+                                .child("rating").setValue(rating, withCompletionBlock: { _ in
+                                    print("Should have completed writing second module")
+                                })
+                    })
+                    .startWithCompleted({
+                        observer.sendCompleted()
+                    })
+            })
         }
     }
-    
-    
 }

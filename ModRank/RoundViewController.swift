@@ -10,9 +10,8 @@ import Foundation
 import UIKit
 import ReactiveCocoa
 import enum Result.NoError
-
+import Chameleon
 import FirebaseDatabase
-
 
 public class RoundViewController: UIViewController {
     
@@ -22,18 +21,19 @@ public class RoundViewController: UIViewController {
     
     typealias ButtonSignal = Signal<Winner, NoError>
     
+    private var fireRef: FIRDatabaseReference!
+    private var _currentRound: RoundProtocol!
     
-    private var _roundProducer: SignalProducer<RoundProtocol, NSError>
+    //UI Components
     private var _firstModuleButton: UIButton = UIButton()
     private var _secondModuleButton: UIButton = UIButton()
     
+    //Signals
+    private var _roundProducer: SignalProducer<RoundProtocol, NSError>
     private var (_firstButtonSignal, _firstButtonObserver) = ButtonSignal.pipe()
     private var (_secondButtonSignal, _secondButtonObserver) = ButtonSignal.pipe()
     private var (_winnerSignal, _winnerObserver) = Signal<ButtonSignal, NoError>.pipe()
     
-    private var _currentRound: RoundProtocol!
-    
-    var fireRef: FIRDatabaseReference!
     
     ////////////////////////////////////////////////////////////////////////////////
     init(roundProducer: SignalProducer<RoundProtocol, NSError>) {
@@ -53,6 +53,7 @@ public class RoundViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
     }
     
+    ////////////////////////////////////////////////////////////////////////////////
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -61,32 +62,14 @@ public class RoundViewController: UIViewController {
     ////////////////////////////////////////////////////////////////////////////////
     override public func viewDidLoad() {
         super.viewDidLoad()
-        
-        
-        self.fireRef = FIRDatabase.database().reference().child("modules")
-        
-//        self.fireRef.observeEventType(
-//            .Value,
-//            withBlock: { snapshot in
-//                guard let value = snapshot.value as? FirebaseValue else {
-//                    fatalError()
-//                }
-//                
-//                print("Firebase sent: \(value)")
-//        })
-        
-        
-        self.view.backgroundColor = UIColor.redColor()
+        self.view.backgroundColor = UIColor.flatNavyBlueColorDark()
       
-        
         self._roundProducer.startWithResult { (result) in
-            
-//            print("Firebase sent: \(result)")
             
             switch result {
             case let .Success(round):
                 self._currentRound = round
-                self.setUpViewWithRound(self._currentRound)
+                self.setUpViewWithRound()
                 self.observeWinnerSignal()
             case let .Failure(error):
                 print("Error: \(error)")
@@ -97,20 +80,14 @@ public class RoundViewController: UIViewController {
     ////////////////////////////////////////////////////////////////////////////////
     private func observeWinnerSignal() {
         
-        _winnerSignal.flatten(.Merge)//.take(1)
+        _winnerSignal.flatten(.Merge).take(1)
             .observeNext { winner in
                 
                 switch winner {
                 case .First:
-                    self._currentRound.declareFirstModuleWinner()
-                        .startWithCompleted({
-                            self.roundPrint()
-                        })
+                    self._currentRound.declareFirstModuleWinner().start()
                 case .Second:
-                    self._currentRound.declareSecondModuleWinner()
-                        .startWithCompleted({
-                            self.roundPrint()
-                        })
+                    self._currentRound.declareSecondModuleWinner().start()
                 }
         }
         
@@ -119,23 +96,33 @@ public class RoundViewController: UIViewController {
     }
     
     ////////////////////////////////////////////////////////////////////////////////
-    private func roundPrint() {
-        print("Ratings after round:")
-        print("\(self._currentRound.firstModule.name): \(self._currentRound.firstModule.rating)")
-        print("\(self._currentRound.secondModule.name): \(self._currentRound.secondModule.rating)")
-    }
-    
-    ////////////////////////////////////////////////////////////////////////////////
-    private func setUpViewWithRound(round: RoundProtocol) {
-        var first = round.firstModule
-        var second = round.secondModule
+    private func setUpViewWithRound() {
         
-        self._firstModuleButton.setTitle(first.name, forState: .Normal)
-        self._secondModuleButton.setTitle(second.name, forState: .Normal)
+        self._currentRound.firstRef.observeSingleEventOfType(.Value,
+            withBlock: { snapshot in
+                
+                if let val = snapshot.value as? [String: AnyObject] {
+                    let name: String = val["name"] as! String
+                    self._firstModuleButton.setTitle(name, forState: .Normal)
+                }
+                
+        })
         
+        self._currentRound.secondRef.observeSingleEventOfType(
+            .Value,
+            withBlock: { snapshot in
+                
+                if let val = snapshot.value as? [String: AnyObject] {
+                    let name: String = val["name"] as! String
+                    self._secondModuleButton.setTitle(name, forState: .Normal)
+                }
+                
+        })
         
-        self._firstModuleButton.backgroundColor = UIColor.blackColor()
-        self._secondModuleButton.backgroundColor = UIColor.blackColor()
+        let buttonback = UIColor.whiteColor().colorWithAlphaComponent(0.5)
+        
+        self._firstModuleButton.backgroundColor = buttonback
+        self._secondModuleButton.backgroundColor = buttonback
         
         
         let minVal = min(self.view.frame.height, self.view.frame.width) - 100.0
@@ -143,7 +130,7 @@ public class RoundViewController: UIViewController {
         
         let firstFrame = CGRect(origin: CGPointZero, size: buttonSize)
         
-        let secondOrigin = CGPoint(x: 0.0, y: self.view.frame.height/2)
+        let secondOrigin = CGPoint(x: self.view.frame.width - buttonSize.width, y: 0.0)
         let secondFrame = CGRect(origin: secondOrigin, size: buttonSize)
         
         self._firstModuleButton.frame = firstFrame
@@ -160,11 +147,3 @@ public class RoundViewController: UIViewController {
     }
     
 }
-
-
-
-
-
-
-
-

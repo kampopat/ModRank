@@ -13,64 +13,17 @@ import FirebaseDatabase
 
 typealias ModulePair = (ModuleProtocol, ModuleProtocol)
 typealias FirebaseValue = [String: AnyObject]
+typealias FirebasePair = (FIRDatabaseReference, FIRDatabaseReference)
 
 ////////////////////////////////////////////////////////////////////////////////
 protocol MatchmakerProtocol {
     
-//    var roundSignal: Signal<RoundProtocol, NSError> { get }
-//    var roundObserver: Observer<RoundProtocol, NSError>  { get }
-    
     func roundProducer() -> SignalProducer<RoundProtocol, NSError>
-    
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 protocol FirebaseMatchMakerProtocol: MatchmakerProtocol {
     var fireRef: FIRDatabaseReference { get }
-}
-
-
-////////////////////////////////////////////////////////////////////////////////
-protocol FirebasePairMatchMakerProtocol: MatchmakerProtocol {
-    var modulesRef: FIRDatabaseReference { get }
-    var firstRef: FIRDatabaseReference? { get set }
-    var secondRef: FIRDatabaseReference? { get set }
-    
-}
-
-////////////////////////////////////////////////////////////////////////////////
-struct FirebasePairMatchMaker: FirebasePairMatchMakerProtocol {
-    var modulesRef: FIRDatabaseReference
-    var firstRef: FIRDatabaseReference? = .None
-    var secondRef: FIRDatabaseReference? = .None
-    
-    var (roundSignal, roundObserver) = Signal<RoundProtocol, NSError>.pipe()
-    
-    init(modulesRef: FIRDatabaseReference) {
-        self.modulesRef = modulesRef
-        
-        self.modulesRef.observeEventType(.Value,
-            withBlock: { snapshot in
-                guard let value = snapshot.value as? FirebaseValue else {
-                    fatalError("Error getting value from snapshot")
-                }
-                
-                let values = value.map({ module in
-                    return module.1 as! [String: AnyObject]
-                })
-                
-                let modules: [ModuleProtocol] = values.map({ moduleDict in
-                    return Module(dict: moduleDict)
-                })
-                
-                
-                
-        })
-    }
-    
-    func roundProducer() -> SignalProducer<RoundProtocol, NSError> {
-        fatalError()
-    }
 }
 
 
@@ -89,8 +42,8 @@ struct FirebaseMatchMaker: FirebaseMatchMakerProtocol {
     ////////////////////////////////////////////////////////////////////////////////
     func roundProducer() -> SignalProducer<RoundProtocol, NSError> {
         return firebaseModulesProducer()
-            .flatMap(.Latest, transform: self.modulesFromFirebaseProducer)
-            .flatMap(.Latest, transform: self.modulesForNextRound)
+            .flatMap(.Latest, transform: self.firebaseReferencesProducer)
+            .flatMap(.Latest, transform: self.referencesForNextRound)
             .flatMap(.Latest, transform: self.nextRound)
     }
     
@@ -113,54 +66,104 @@ struct FirebaseMatchMaker: FirebaseMatchMakerProtocol {
     }
     
     ////////////////////////////////////////////////////////////////////////////////
-    private func modulesFromFirebaseProducer(value: FirebaseValue) -> SignalProducer<[ModuleProtocol], NSError> {
-        
+    private func firebaseReferencesProducer(value: FirebaseValue) -> SignalProducer<[FIRDatabaseReference], NSError> {
         return SignalProducer { observer, _ in
-            let values = value.map({ module in
-                return module.1 as! [String: AnyObject]
+        
+            let keys = value.map({ module in
+                return module.0
             })
             
-            let modules: [ModuleProtocol] = values.map({ moduleDict in
-                return Module(dict: moduleDict)
+            let references = keys.map({ key in
+                return self.fireRef.child(key)
             })
             
-            observer.sendNext(modules)
+            observer.sendNext(references)
             observer.sendCompleted()
         }
     }
     
-    
     ////////////////////////////////////////////////////////////////////////////////
-    private func modulesForNextRound(modules: [ModuleProtocol]) -> SignalProducer<ModulePair, NSError> {
+    private func referencesForNextRound(references: [FIRDatabaseReference]) -> SignalProducer<FirebasePair, NSError> {
         
         return SignalProducer { observer, _ in
             
-            var mods = modules
+            var refs = references
             
-            if mods.count > 1 {
+            if refs.count > 1 {
+                let firstIndex = Int(arc4random_uniform(UInt32(refs.count)))
+                let first = refs.removeAtIndex(firstIndex)
                 
-                let firstIndex = Int(arc4random_uniform(UInt32(mods.count)))
-                let first = mods.removeAtIndex(firstIndex)
+                let secondIndex = Int(arc4random_uniform(UInt32(refs.count)))
+                let second = refs.removeAtIndex(secondIndex)
                 
-                let secondIndex = Int(arc4random_uniform(UInt32(mods.count)))
-                let second = mods.removeAtIndex(secondIndex)
-                let pair = ModulePair(first, second)
+                let pair = FirebasePair(first, second)
                 observer.sendNext(pair)
                 observer.sendCompleted()
             }
+        
         }
     }
     
     ////////////////////////////////////////////////////////////////////////////////
-    private func nextRound(modules: ModulePair) -> SignalProducer<RoundProtocol, NSError> {
+    private func nextRound(references: FirebasePair) -> SignalProducer<RoundProtocol, NSError> {
         return SignalProducer { observer, _ in
             
             let elo = EloRating()
-            let round = Round(firstModule: modules.0, secondModule: modules.1, elo: elo)
+            let round = Round(firstRef: references.0, secondRef: references.1, elo: elo)
             observer.sendNext(round)
             observer.sendCompleted()
         }
     }
+    
+//    ////////////////////////////////////////////////////////////////////////////////
+//    private func modulesFromFirebaseProducer(value: FirebaseValue) -> SignalProducer<[ModuleProtocol], NSError> {
+//        
+//        return SignalProducer { observer, _ in
+//            let values = value.map({ module in
+//                return module.1 as! [String: AnyObject]
+//            })
+//            
+//            let modules: [ModuleProtocol] = values.map({ moduleDict in
+//                return Module(dict: moduleDict)
+//            })
+//            
+//            observer.sendNext(modules)
+//            observer.sendCompleted()
+//        }
+//    }
+//    
+//    
+//    ////////////////////////////////////////////////////////////////////////////////
+//    private func modulesForNextRound(modules: [ModuleProtocol]) -> SignalProducer<ModulePair, NSError> {
+//        
+//        return SignalProducer { observer, _ in
+//            
+//            var mods = modules
+//            
+//            if mods.count > 1 {
+//                
+//                let firstIndex = Int(arc4random_uniform(UInt32(mods.count)))
+//                let first = mods.removeAtIndex(firstIndex)
+//                
+//                let secondIndex = Int(arc4random_uniform(UInt32(mods.count)))
+//                let second = mods.removeAtIndex(secondIndex)
+//                let pair = ModulePair(first, second)
+//                observer.sendNext(pair)
+//                observer.sendCompleted()
+//            }
+//        }
+//    }
+    
+//    ////////////////////////////////////////////////////////////////////////////////
+//    private func nextRound(modules: ModulePair) -> SignalProducer<RoundProtocol, NSError> {
+//        return SignalProducer { observer, _ in
+//            
+//            let elo = EloRating()
+//            let round = Round(firstModule: modules.0, secondModule: modules.1, elo: elo)
+//            observer.sendNext(round)
+//            observer.sendCompleted()
+//        }
+//    }
 }
 
 
