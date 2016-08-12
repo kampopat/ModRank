@@ -11,7 +11,9 @@ import Foundation
 // --------------------
 // MARK: Module references
 // --------------------
-let kModulesReferenceKey = "modules"
+public let kModulesReferenceKey = "modules"
+public let kCategoriesReferenceKey = "categories"
+
 
 //Ratings
 let kRatingFirstKey = "ratingFirst"
@@ -29,3 +31,9 @@ let kKFactorSecondKey = "kFactorySecond"
 // MARK: Other
 // --------------------
 let kRatingsRounding = 3
+
+// --------------------
+// MARK: UI
+// --------------------
+let kMainLabelText = "Which module should we build next?"
+let kNameLabelText = "What say you, %@?"

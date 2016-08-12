@@ -32,8 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     ////////////////////////////////////////////////////////////////////////////////
     private func rootViewController() -> UIViewController {
-        let modulesRef = FIRDatabase.database().reference().child(kModulesReferenceKey)
-        let firebaseMatchMaker = FirebaseMatchMaker(fireRef: modulesRef)
+        let firebaseMatchMaker = FirebaseMatchMaker(referenceKey: kModulesReferenceKey)
         return RoundViewController(roundProducer: firebaseMatchMaker.roundProducer())
     }
 

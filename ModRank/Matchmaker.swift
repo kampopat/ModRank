@@ -36,9 +36,13 @@ protocol FirebaseMatchMakerProtocol: MatchmakerProtocol {
 // MARK: Firebase matchmaker
 // --------------------
 ////////////////////////////////////////////////////////////////////////////////
-struct FirebaseMatchMaker: FirebaseMatchMakerProtocol {
+public struct FirebaseMatchMaker: FirebaseMatchMakerProtocol {
     
     var fireRef: FIRDatabaseReference
+    
+    init(referenceKey: String) {
+        self.fireRef = FIRDatabase.database().reference().child(referenceKey)
+    }
     
     ////////////////////////////////////////////////////////////////////////////////
     func roundProducer() -> SignalProducer<RoundProtocol, NSError> {
