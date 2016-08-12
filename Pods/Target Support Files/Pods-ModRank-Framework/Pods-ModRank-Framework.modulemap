@@ -1,0 +1,6 @@
+framework module Pods_ModRank_Framework {
+  umbrella header "Pods-ModRank-Framework-umbrella.h"
+
+  export *
+  module * { export * }
+}

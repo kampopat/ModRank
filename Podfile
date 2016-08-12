@@ -8,6 +8,11 @@ pod 'Firebase'
 pod 'Firebase/Database'
 end
 
+target 'ModRank-Framework' do 
+pod 'Firebase'
+pod 'Firebase/Database' 
+end
+
 target 'ModRankTests' do
 
 end

@@ -48,6 +48,16 @@
                ReferencedContainer = "container:ModRank.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "DBEA353F1D5E352D00B39EDB"
+               BuildableName = "ModRank-FrameworkTests.xctest"
+               BlueprintName = "ModRank-FrameworkTests"
+               ReferencedContainer = "container:ModRank.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
